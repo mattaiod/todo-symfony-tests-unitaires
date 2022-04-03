@@ -81,4 +81,37 @@ class ToDoList
 
         return $this;
     }
+
+    public function validateNbItemEqual10()
+    {
+        if (count($this->getItemToDos()) <= 10) {
+            return true;
+        }
+        return false;
+    }
+
+    public function validateNbItemEqual8()
+    {
+        if (count($this->getItemToDos()) == 8) {
+            return true;
+        }
+        return false;
+    }
+
+    public function canAddNewItemCausedBy30MinutesMinimumLimit($dateTimeLastItem): bool
+    {
+        if ((date_timestamp_get(new \DateTime()) - $dateTimeLastItem) < 30 * 60) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function getDateTimeLastItem(){
+//        $items = $this->getItemToDos();
+//        foreach ($items as $item) {
+//            $item->getCreatedAt()
+    }
+
 }

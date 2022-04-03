@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ItemToDo index{% endblock %}
+
+{% block body %}
+    <h1>ItemToDo index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Content</th>
+                <th>CreatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item_to_do in item_to_dos %}
+            <tr>
+                <td>{{ item_to_do.id }}</td>
+                <td>{{ item_to_do.name }}</td>
+                <td>{{ item_to_do.content }}</td>
+                <td>{{ item_to_do.createdAt ? item_to_do.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('item_to_do_show', {'id': item_to_do.id}) }}">show</a>
+                    <a href="{{ path('item_to_do_edit', {'id': item_to_do.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('item_to_do_new') }}">Create new</a>
+{% endblock %}

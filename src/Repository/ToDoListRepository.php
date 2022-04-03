@@ -19,6 +19,10 @@ class ToDoListRepository extends ServiceEntityRepository
         parent::__construct($registry, ToDoList::class);
     }
 
+    public function getLastItem() {
+        //return $this->findOneBy()
+    }
+
     // /**
     //  * @return ToDoList[] Returns an array of ToDoList objects
     //  */

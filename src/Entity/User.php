@@ -38,15 +38,16 @@ class User
      */
     private $password;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $age;
 
     /**
      * @ORM\OneToOne(targetEntity=ToDoList::class, mappedBy="userApp", cascade={"persist", "remove"})
      */
     private $toDoList;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $birthday;
 
     public function getId(): ?int
     {
@@ -129,4 +130,64 @@ class User
 
         return $this;
     }
+
+    public function getBirthday(): ?\DateTimeInterface
+    {
+        return $this->birthday;
+    }
+
+    public function setBirthday(\DateTimeInterface $birthday): self
+    {
+        $this->birthday = $birthday;
+
+        return $this;
+    }
+
+    public function validateEmail(): bool
+    {
+        if (filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function validatePassword(): bool {
+        $sizePassword = strlen($this->password);
+        if ($sizePassword >= 8 && $sizePassword <= 40) {
+            return true;
+        }
+        return false;
+    }
+
+    public function validateAge(): bool {
+        $diff = date_diff($this->getBirthday(), date_create((new \DateTime("now"))->format("d-m-Y")));
+        $age = $diff->format('%y');
+        if ($age >= 13) {
+            return true;
+        }
+        return false;
+    }
+
+    public function validateFirstname(): bool
+    {
+        return !empty($this->firstName);
+    }
+
+    public function validateLastname(): bool
+    {
+        return !empty($this->lastName);
+    }
+
+    public function isValid(): bool {
+        if ($this->validateFirstname($this->firstName) === true
+            && $this->validateLastName($this->lastName) === true
+            && $this->validateEmail($this->email) === true
+            && $this->validatePassword($this->password) === true
+            && $this->validateAge($this->birthday)) {
+            return true;
+        }
+        return false;
+    }
+
+
 }

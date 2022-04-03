@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "63401c1eca925ae5904d75da0cbbc85f",
+    "content-hash": "65c9c316a36035e3371c774df87b9a4e",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -6690,16 +6690,16 @@
         },
         {
             "name": "symfony/validator",
-            "version": "v6.0.3",
+            "version": "v6.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/validator.git",
-                "reference": "35f3614f605227ad16e03cab9fb9815ba05f5878"
+                "reference": "62f66d9c3141429f4328e0a3981da5669cabaef0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/validator/zipball/35f3614f605227ad16e03cab9fb9815ba05f5878",
-                "reference": "35f3614f605227ad16e03cab9fb9815ba05f5878",
+                "url": "https://api.github.com/repos/symfony/validator/zipball/62f66d9c3141429f4328e0a3981da5669cabaef0",
+                "reference": "62f66d9c3141429f4328e0a3981da5669cabaef0",
                 "shasum": ""
             },
             "require": {
@@ -6778,7 +6778,7 @@
             "description": "Provides tools to validate values",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/validator/tree/v6.0.3"
+                "source": "https://github.com/symfony/validator/tree/v6.0.7"
             },
             "funding": [
                 {
@@ -6794,7 +6794,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-26T17:23:29+00:00"
+            "time": "2022-03-31T17:18:25+00:00"
         },
         {
             "name": "symfony/var-dumper",
@@ -9604,5 +9604,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }

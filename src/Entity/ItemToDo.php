@@ -90,4 +90,14 @@ class ItemToDo
 
         return $this;
     }
+
+    public function isValidContentUnder1000Chars () {
+        if (strlen($this->content) =< 1000) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
 }
