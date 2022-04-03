@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 class UserTest extends TestCase
 {
     /** @test */
-    public function validateUserWithGoodData(): void
+    public function testUserWithAccurateData(): void
     {
         $user = new User();
         $user->setFirstName("John");
@@ -21,7 +21,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function validateUserWithBadFirstName(): void
+    public function testUserWithNonAccurateFirstName(): void
     {
         $user = new User();
         $user->setFirstName("");
@@ -33,7 +33,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function validateUserWithBadLastName(): void
+    public function testUserWithNonAccurateLastName(): void
     {
         $user = new User();
         $user->setFirstName("John");
@@ -45,7 +45,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function validateUserWithBadEmail(): void
+    public function testUserWithNonAccurateEmail(): void
     {
         $user = new User();
         $user->setFirstName("John");
@@ -57,7 +57,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function validateUserWithBadPassword(): void
+    public function testUserWithNonAccuratePassword(): void
     {
         $user = new User();
         $user->setFirstName("John");
@@ -69,7 +69,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function validateUserWithBadBirthday(): void
+    public function testUserWithBadBirthday(): void
     {
         $user = new User();
         $user->setFirstName("John");
@@ -83,13 +83,17 @@ class UserTest extends TestCase
     public function testMultipleToDoListCreation(): void
     {
         $user = new User();
-        $todoList = new ToDoList();
-        $todoList = new ToDoList();
         $user->setFirstName("John");
         $user->setLastName("Doe");
         $user->setEmail("johndoe@test.com");
         $user->setPassword("mdp");
         $user->setBirthday(new \DateTime("06-06-2015"));
+
+        $todoList1 = new ToDoList();
+        $todoList2 = new ToDoList();
+        $user->setToDoList($todoList1);
+        $user->setToDoList($todoList2);
+        $this->assertEquals($todoList2, $user->getToDoList());
         $this->assertFalse($user->isValid());
     }
 }

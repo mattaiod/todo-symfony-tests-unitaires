@@ -3,7 +3,7 @@ namespace App\Service;
 
 class EmailSenderService
 {
-    public function sendEmail(): string
+    static function sendEmail(): string
     {
         return true;
     }

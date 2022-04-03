@@ -8,44 +8,56 @@ use App\Entity\ToDoList;
 use App\Entity\User;
 use App\Repository\ToDoListRepository;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\Constraints\Date;
 
 class ToDoListTest extends TestCase
 {
-    /** @test */
-    public function testUserOnlyHasOneTodolist(): void
+
+
+    public function testMoreThanTenItems()
     {
-        $user = new User();
-        $user->setFirstName("John");
-        $user->setLastName("Doe");
-        $user->setEmail("johndoe@test.com");
-        $user->setPassword("password");
-        $user->setBirthday(new \DateTime("06-06-1970"));
-
-        $toDoListMock = $this->createMock(User::class);
-        $toDoListMock->method('setToDoList')->will($this->return());
-        $this->assertTrue($item->isValidContentUnder1000Chars());
-
-
+        $todolist = new ToDoList();
+        $item = new ItemToDo();
+        for ($i = 0; $i < 5; $i++) {
+            $todolist->addItemToDo($item);
+        }
+        $this->assertTrue($todolist->isNbItemLess10());
     }
 
-    public function testValidRespectTimeCreateOf30min()
+    public function testImpossibilityToAddItemWithNonUniqueName(): void
     {
-
-
-        $currentTimeStamp  = date_timestamp_get(date_create());
-        $dateOfMockup = $currentTimeStamp - 5*60;
-
-        $toDoListMock = $this->createMock(ToDoList::class);
-        $toDoListMock->method('getDateTimeLastItem')->will($this->return());
-
-        $dateTimeLastItem = $toDoListMock->getDateTimeLastItem();
-
-        $toDoListMock->canAddNewItemCausedBy30MinutesMinimumLimit();
-
+        $todolist = new ToDoList();
+        $item = new ItemToDo();
+        $item->setName("uniqueName");
+        $item2 = new ItemToDo();
+        $item2->setName("uniqueName");
+        $todolist->addItemToDo($item);
+        $this->assertFalse($todolist->isUniqueNameAmongTodo($item2));
     }
 
-    //TODO:(T= A la 8ème item: send email à l’utilisateur pour lui dire il en reste que 2:     EmailSenderService)
+    public function testSendEmailAt8thElement(): void
+    {
+        $todolist = new ToDoList();
+        $item = new ItemToDo();
+        for ($i = 0; $i < 7; $i++) {
+            $todolist->addItemToDo($item);
+        }
+        $this->assertTrue($todolist->isCurrentItem8th());
+    }
 
-    //TODO: (T= verif peut contenir 0 a 10 items uniquement dans la todo)
+    public function testCreateItemAfter40min()
+    {
+        $toDoList = new ToDoList();
+        $item = new ItemToDo();
+        $item2 = new ItemToDo();
+
+        $currentTimeStamp = date_timestamp_get(date_create());
+        $dateOfPreviousItem = $currentTimeStamp - 40 * 60;
+
+        $item->setCreatedAt((new \DateTime())->setTimestamp($dateOfPreviousItem));
+        $item2->setCreatedAt(new \DateTime());
+        $toDoList->addItemToDo($item);
+        $this->assertFalse($toDoList->canAddItemToDo($item2));
+    }
 
 }

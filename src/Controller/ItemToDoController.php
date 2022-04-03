@@ -81,15 +81,5 @@ class ItemToDoController extends AbstractController
         return $this->redirectToRoute('item_to_do_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    public function validateNameUniqueInToDoList (ToDoListRepository $toDoListRepository, ItemToDo $item) {
-        $items = $toDoListRepository->findBy("name == $item->name");
-        if (count($items) > 0) {
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-
 
 }

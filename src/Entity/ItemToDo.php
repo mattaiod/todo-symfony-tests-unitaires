@@ -34,9 +34,9 @@ class ItemToDo
     private $content;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private ?\DateTime $createdAt;
 
     public function getId(): ?int
     {
@@ -79,12 +79,12 @@ class ItemToDo
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -92,7 +92,8 @@ class ItemToDo
     }
 
     public function isValidContentUnder1000Chars () {
-        if (strlen($this->content) =< 1000) {
+        $strlen = strlen($this->getContent());
+        if ( $strlen <= 1000) {
             return true;
         }
         else {

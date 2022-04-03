@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ToDoListRepository;
+use App\Service\EmailSenderService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -60,17 +61,58 @@ class ToDoList
         return $this->itemToDos;
     }
 
-    public function addItemToDo(ItemToDo $itemToDo): self
+    public function canAddItemToDo($itemTodo): bool
     {
-        if (!$this->itemToDos->contains($itemToDo)) {
-            $this->itemToDos[] = $itemToDo;
-            $itemToDo->setToDoList($this);
+        if (!$this->isNbItemLess10()) {
+            return false;
         }
-
-        return $this;
+        if (!$this->isUniqueNameAmongTodo($itemTodo)) {
+            return false;
+        }
+        if (!$this->canAddNewItemCausedBy30MinutesMinimumLimit()) {
+            return false;
+        }
+        return true;
     }
 
-    public function removeItemToDo(ItemToDo $itemToDo): self
+
+    public function addItemToDo(ItemToDo $itemToDo): bool
+    {
+        if ($this->canAddItemToDo($itemToDo)) {
+            return false;
+        }
+
+        if ($this->isCurrentItem8th()) {
+            EmailSenderService::sendEmail();
+        }
+
+        $this->itemToDos[] = $itemToDo;
+        $itemToDo->setToDoList($this);
+
+        return true;
+    }
+
+    public function isCurrentItem8th(): bool
+    {
+        if (count($this->itemToDos) == 7) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public function isUniqueNameAmongTodo($currentItem): bool
+    {
+        foreach ($this->getItemToDos() as $item) {
+            if ($item->getName() == $currentItem->getName())
+                return false;
+        }
+        return true;
+    }
+
+
+    public
+    function removeItemToDo(ItemToDo $itemToDo): self
     {
         if ($this->itemToDos->removeElement($itemToDo)) {
             // set the owning side to null (unless already changed)
@@ -82,25 +124,27 @@ class ToDoList
         return $this;
     }
 
-    public function validateNbItemEqual10()
+    public
+    function isNbItemLess10()
     {
-        if (count($this->getItemToDos()) <= 10) {
+        if (count($this->getItemToDos()) < 10) {
             return true;
         }
         return false;
     }
 
-    public function validateNbItemEqual8()
+    public
+    function isNbItemEqual7()
     {
-        if (count($this->getItemToDos()) == 8) {
+        if (count($this->getItemToDos()) <= 8) {
             return true;
         }
         return false;
     }
 
-    public function canAddNewItemCausedBy30MinutesMinimumLimit($dateTimeLastItem): bool
+    public function canAddNewItemCausedBy30MinutesMinimumLimit(): bool
     {
-        if ((date_timestamp_get(new \DateTime()) - $dateTimeLastItem) < 30 * 60) {
+        if ((date_timestamp_get(new \DateTime()) - $this->getDateTimeLastItem()) <= 30 * 60) {
             return true;
         } else {
             return false;
@@ -108,10 +152,13 @@ class ToDoList
     }
 
 
-    public function getDateTimeLastItem(){
-//        $items = $this->getItemToDos();
-//        foreach ($items as $item) {
-//            $item->getCreatedAt()
-    }
+    public function getDateTimeLastItem()
+    {
+        $itemToDos = $this->getItemToDos()->toArray();
 
-}
+        usort($itemToDos, function ($a, $b) {
+            return $a->getCreatedAt() <=> $b->getCreatedAt();
+        });
+        return end($itemToDos);
+    }
+    }
